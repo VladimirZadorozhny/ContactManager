@@ -17,6 +17,7 @@ public class ContactApp {
             System.out.println("4. Export to XML ->");
             System.out.println("5. Import from JSON ->");
             System.out.println("6. Import from XML ->");
+            System.out.println("7. Delete contact ->");
             System.out.println("0. Stop -X");
             System.out.print("Enter your choice: ");
 
@@ -57,6 +58,16 @@ public class ContactApp {
                     break;
                 case 6:
                     manager.importFromXml(FILENAME_XML);
+                    break;
+                case 7:
+                    try {
+                        System.out.println("Enter contact email: ");
+                        String email = scanner.nextLine();
+                        manager.deleteContact(email);
+                        System.out.println("Contact deleted successfully!");
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 0:
                     System.out.println("Good bye");

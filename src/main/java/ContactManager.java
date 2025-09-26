@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class ContactManager {
     private static ContactManager instance;
@@ -76,5 +77,17 @@ public class ContactManager {
         } catch (Exception e) {
             System.out.println("XML import error: " + e.getMessage());
         }
+    }
+
+    private Optional<Contact> findContact(String email) {
+        return contacts
+                .stream()
+                .filter(e -> e.getEmail().equals(email))
+                .findFirst();
+    }
+
+    public void deleteContact(String email) {
+        var result = findContact(email).orElseThrow(() -> new IllegalArgumentException("Contact not found!"));
+        contacts.remove(result);
     }
 }

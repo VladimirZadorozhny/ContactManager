@@ -1,5 +1,6 @@
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "contact")
@@ -7,6 +8,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 public class Contact {
     private  String name;
     private  String phone;
+    @XmlAttribute(name = "e-mail")
     private  String email;
 
     protected Contact() {
