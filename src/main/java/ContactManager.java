@@ -1,4 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Marshaller;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +36,19 @@ public class ContactManager {
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(filename), contacts);
             System.out.println("Export successfully to " + filename);
         } catch (IOException e) {
+            System.out.println("Export error: " + e.getMessage());
+        }
+    }
+
+    public void exportToXml(String filename) {
+        try {
+            JAXBContext context = JAXBContext.newInstance(ContactList.class);
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            ContactList wrapper = new ContactList(contacts);
+            marshaller.marshal(wrapper, new File(filename));
+            System.out.println("Export successfully to " + filename);
+        } catch (Exception e) {
             System.out.println("Export error: " + e.getMessage());
         }
     }

@@ -1,7 +1,8 @@
 import java.util.Scanner;
 
 public class ContactApp {
-    private static final String FILENAME = "contacts.json";
+    private static final String FILENAME_JSON = "contacts.json";
+    private static final String FILENAME_XML = "contacts.xml";
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -13,6 +14,7 @@ public class ContactApp {
             System.out.println("1. Add contact ->");
             System.out.println("2. Show all contacts ->");
             System.out.println("3. Export to JSON ->");
+            System.out.println("4. Export to XML ->");
             System.out.println("0. Stop -X");
             System.out.print("Enter your choice: ");
 
@@ -43,8 +45,11 @@ public class ContactApp {
                     }
                     break;
                 case 3:
-                    manager.exportToJson(FILENAME);
+                    manager.exportToJson(FILENAME_JSON);
                    break;
+                case 4:
+                    manager.exportToXml(FILENAME_XML);
+                    break;
                 case 0:
                     System.out.println("Good bye");
                     return;

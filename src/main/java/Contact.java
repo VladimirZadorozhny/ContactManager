@@ -1,7 +1,17 @@
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "contact")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Contact {
-    private final String name;
-    private final String phone;
-    private final String email;
+    private  String name;
+    private  String phone;
+    private  String email;
+
+    protected Contact() {
+
+    }
 
     public Contact(String name, String phone, String email) {
         this.name = name;
