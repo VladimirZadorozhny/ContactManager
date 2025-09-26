@@ -15,6 +15,8 @@ public class ContactApp {
             System.out.println("2. Show all contacts ->");
             System.out.println("3. Export to JSON ->");
             System.out.println("4. Export to XML ->");
+            System.out.println("5. Import from JSON ->");
+            System.out.println("6. Import from XML ->");
             System.out.println("0. Stop -X");
             System.out.print("Enter your choice: ");
 
@@ -49,6 +51,12 @@ public class ContactApp {
                    break;
                 case 4:
                     manager.exportToXml(FILENAME_XML);
+                    break;
+                case 5:
+                    manager.importFromJson(FILENAME_JSON);
+                    break;
+                case 6:
+                    manager.importFromXml(FILENAME_XML);
                     break;
                 case 0:
                     System.out.println("Good bye");

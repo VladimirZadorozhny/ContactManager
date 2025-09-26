@@ -1,10 +1,12 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ContactManager {
@@ -40,6 +42,17 @@ public class ContactManager {
         }
     }
 
+    public void importFromJson(String filename) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            List<Contact> imported = Arrays.asList(mapper.readValue(new File(filename), Contact[].class));
+            contacts.addAll(imported);
+            System.out.println(imported.size() + " contacts imported from file " + filename);
+        } catch (Exception e) {
+            System.out.println("JSON import error: " + e.getMessage());
+        }
+    }
+
     public void exportToXml(String filename) {
         try {
             JAXBContext context = JAXBContext.newInstance(ContactList.class);
@@ -50,6 +63,18 @@ public class ContactManager {
             System.out.println("Export successfully to " + filename);
         } catch (Exception e) {
             System.out.println("Export error: " + e.getMessage());
+        }
+    }
+
+    public void importFromXml(String filename) {
+        try {
+            JAXBContext context = JAXBContext.newInstance(ContactList.class);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            ContactList wrapper = (ContactList) unmarshaller.unmarshal(new File(filename));
+            contacts.addAll(wrapper.getContacts());
+            System.out.println(wrapper.getContacts().size() + " contacts imported from file " + filename);
+        } catch (Exception e) {
+            System.out.println("XML import error: " + e.getMessage());
         }
     }
 }
