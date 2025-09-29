@@ -6,9 +6,14 @@ import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 
 import javax.xml.XMLConstants;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,6 +73,15 @@ public class ContactManager {
             marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,
                     "http://www.mystudying.org/contactsManager contacts.xsd");
             ContactList wrapper = new ContactList(contacts);
+
+            StringWriter writer = new StringWriter();
+            marshaller.marshal(wrapper, writer);
+
+            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = factory.newSchema(SCHEMA_PATH.toFile());
+            Validator validator = schema.newValidator();
+            validator.validate(new StreamSource(new StringReader(writer.toString())));
+
             marshaller.marshal(wrapper, new File(filename));
             System.out.println("Export successfully to " + filename);
         } catch (Exception e) {
@@ -79,8 +93,8 @@ public class ContactManager {
         try {
             JAXBContext context = JAXBContext.newInstance(ContactList.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            var factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            var schema = factory.newSchema(SCHEMA_PATH.toFile());
+            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = factory.newSchema(SCHEMA_PATH.toFile());
             unmarshaller.setSchema(schema);
             ContactList wrapper = (ContactList) unmarshaller.unmarshal(new File(filename));
             contacts.addAll(wrapper.getContacts());
@@ -98,7 +112,7 @@ public class ContactManager {
     }
 
     public void deleteContact(String email) {
-        var result = findContact(email).orElseThrow(() -> new IllegalArgumentException("org.mystudying.app.Contact not found!"));
+        var result = findContact(email).orElseThrow(() -> new IllegalArgumentException("Contact not found!"));
         contacts.remove(result);
     }
 }
