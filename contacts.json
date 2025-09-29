@@ -1,5 +1,9 @@
 [ {
+  "name" : "name2",
+  "phone" : "0479233652",
+  "email" : "name2@org.com"
+}, {
   "name" : "name1",
   "phone" : "0479233652",
-  "email" : "name1@gmail.com"
+  "email" : "name1@org.com"
 } ]

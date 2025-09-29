@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<contacts>
-    <contact>
+<contacts xmlns="http://www.mystudying.org/contactsManager" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mystudying.org/contactsManager contacts.xsd">
+    <contact e-mail="name2@org.com">
+        <name>name2</name>
+        <phone>0479233652</phone>
+    </contact>
+    <contact e-mail="name1@org.com">
         <name>name1</name>
         <phone>0479233652</phone>
-        <email>name1@gmail.com</email>
     </contact>
 </contacts>

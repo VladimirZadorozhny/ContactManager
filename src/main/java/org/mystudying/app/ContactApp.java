@@ -1,3 +1,5 @@
+package org.mystudying.app;
+
 import java.util.Scanner;
 
 public class ContactApp {
@@ -10,7 +12,7 @@ public class ContactApp {
 
 
         while (true) {
-            System.out.println("\n ---- Contact Manager ---- ");
+            System.out.println("\n ---- org.mystudying.app.Contact Manager ---- ");
             System.out.println("1. Add contact ->");
             System.out.println("2. Show all contacts ->");
             System.out.println("3. Export to JSON ->");
@@ -36,7 +38,7 @@ public class ContactApp {
 
                         Contact contact = ContactFactory.createContact(name, phone, email);
                         manager.addContact(contact);
-                        System.out.println("Contact added.");
+                        System.out.println("org.mystudying.app.Contact added.");
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
@@ -64,7 +66,7 @@ public class ContactApp {
                         System.out.println("Enter contact email: ");
                         String email = scanner.nextLine();
                         manager.deleteContact(email);
-                        System.out.println("Contact deleted successfully!");
+                        System.out.println("org.mystudying.app.Contact deleted successfully!");
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }

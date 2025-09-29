@@ -1,10 +1,15 @@
+package org.mystudying.app;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 
+import javax.xml.XMLConstants;
+import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +17,7 @@ import java.util.Optional;
 
 public class ContactManager {
     private static ContactManager instance;
+    private final static Path SCHEMA_PATH = Path.of("contacts.xsd");
     private List<Contact> contacts = new ArrayList<>();
 
     private ContactManager() {
@@ -59,6 +65,8 @@ public class ContactManager {
             JAXBContext context = JAXBContext.newInstance(ContactList.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,
+                    "http://www.mystudying.org/contactsManager contacts.xsd");
             ContactList wrapper = new ContactList(contacts);
             marshaller.marshal(wrapper, new File(filename));
             System.out.println("Export successfully to " + filename);
@@ -71,6 +79,9 @@ public class ContactManager {
         try {
             JAXBContext context = JAXBContext.newInstance(ContactList.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
+            var factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            var schema = factory.newSchema(SCHEMA_PATH.toFile());
+            unmarshaller.setSchema(schema);
             ContactList wrapper = (ContactList) unmarshaller.unmarshal(new File(filename));
             contacts.addAll(wrapper.getContacts());
             System.out.println(wrapper.getContacts().size() + " contacts imported from file " + filename);
@@ -87,7 +98,7 @@ public class ContactManager {
     }
 
     public void deleteContact(String email) {
-        var result = findContact(email).orElseThrow(() -> new IllegalArgumentException("Contact not found!"));
+        var result = findContact(email).orElseThrow(() -> new IllegalArgumentException("org.mystudying.app.Contact not found!"));
         contacts.remove(result);
     }
 }
