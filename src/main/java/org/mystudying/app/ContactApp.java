@@ -20,6 +20,7 @@ public class ContactApp {
             System.out.println("5. Import from JSON ->");
             System.out.println("6. Import from XML ->");
             System.out.println("7. Delete contact ->");
+            System.out.println("8. Make html file from xml ->");
             System.out.println("0. Stop -X");
             System.out.print("Enter your choice: ");
 
@@ -71,6 +72,12 @@ public class ContactApp {
                         System.out.println(e.getMessage());
                     }
                     break;
+                case 8:
+                    try {
+                        manager.xmlToHtml();
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                 case 0:
                     System.out.println("Good bye");
                     return;

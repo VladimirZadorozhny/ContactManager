@@ -6,12 +6,15 @@ import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 
 import javax.xml.XMLConstants;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.file.Path;
@@ -144,5 +147,16 @@ public class ContactManager {
     public void deleteContact(String email) {
         var result = findContact(email).orElseThrow(() -> new IllegalArgumentException("Contact not found!"));
         contacts.remove(result);
+    }
+
+    public void xmlToHtml() throws Exception {
+        TransformerFactory factory = TransformerFactory.newInstance();
+        Source xslt = new StreamSource(new File("contactsToHTML.xslt"));
+        Transformer transformer = factory.newTransformer(xslt);
+
+        Source text = new StreamSource(new File("contacts.xml"));
+        transformer.transform(text, new StreamResult(new File("contacts.html")));
+
+        System.out.println("HTML generated successfully!");
     }
 }
