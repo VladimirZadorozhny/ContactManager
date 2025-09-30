@@ -80,9 +80,13 @@ Run the application (ContactApp)
 Choose an option from the console menu:
 
 Add a new contact
+
 Show all contacts
+
 Import/export contacts (JSON/XML)
+
 Delete a contact
+
 Generate an HTML page
 
 Data is saved and validated automatically
