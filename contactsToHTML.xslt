@@ -40,6 +40,7 @@
                         <th>Email</th>
                     </tr>
                     <xsl:for-each select="org:contact">
+                        <xsl:sort select="org:name" order="ascending" data-type="text"/>
                         <tr>
                             <td><xsl:value-of select="org:name"/></td>
                             <td><xsl:value-of select="org:phone"/></td>
