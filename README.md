@@ -61,7 +61,9 @@ This guarantees consistent and valid data across all formats.
 ## Example Files
 
 contacts.json – Stores contacts in JSON format
+
 contacts.xml – Stores contacts in XML format (validated against XSD)
+
 contacts.html – Generated HTML table of contacts (via XSLT)
 
 
