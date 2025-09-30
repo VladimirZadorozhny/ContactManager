@@ -21,19 +21,20 @@ import java.util.List;
 import java.util.Optional;
 
 public class ContactManager {
-    private static ContactManager instance;
+
     private final static Path SCHEMA_PATH = Path.of("contacts.xsd");
     private List<Contact> contacts = new ArrayList<>();
 
     private ContactManager() {
+    }
+
+    private static class Helper {
+        private final static ContactManager INSTANCE = new ContactManager();
 
     }
 
     public static ContactManager getInstance() {
-        if (instance == null) {
-            instance = new ContactManager();
-        }
-        return instance;
+        return Helper.INSTANCE;
     }
 
     public void addContact(Contact contact) {
