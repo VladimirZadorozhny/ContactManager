@@ -12,7 +12,7 @@ public class ContactApp {
 
 
         while (true) {
-            System.out.println("\n ---- org.mystudying.app.Contact Manager ---- ");
+            System.out.println("\n ---- Contact Manager ---- ");
             System.out.println("1. Add contact ->");
             System.out.println("2. Show all contacts ->");
             System.out.println("3. Export to JSON ->");
@@ -78,6 +78,7 @@ public class ContactApp {
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
+                    break;
                 case 0:
                     System.out.println("Good bye");
                     return;

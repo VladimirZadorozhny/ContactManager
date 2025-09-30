@@ -53,16 +53,19 @@ public class ContactManager {
         switch (extension) {
             case "json" -> {
                 ObjectMapper mapper = new ObjectMapper();
-                imported.addAll(Arrays.asList(mapper.readValue(new File(filename), Contact[].class)));
+                if (new File(filename).exists())
+                    imported.addAll(Arrays.asList(mapper.readValue(new File(filename), Contact[].class)));
             }
             case "xml" -> {
-                JAXBContext context = JAXBContext.newInstance(ContactList.class);
-                Unmarshaller unmarshaller = context.createUnmarshaller();
-                SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                Schema schema = factory.newSchema(SCHEMA_PATH.toFile());
-                unmarshaller.setSchema(schema);
-                ContactList wrapper = (ContactList) unmarshaller.unmarshal(new File(filename));
-                imported = wrapper.getContacts();
+                if (new File(filename).exists()) {
+                    JAXBContext context = JAXBContext.newInstance(ContactList.class);
+                    Unmarshaller unmarshaller = context.createUnmarshaller();
+                    SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                    Schema schema = factory.newSchema(SCHEMA_PATH.toFile());
+                    unmarshaller.setSchema(schema);
+                    ContactList wrapper = (ContactList) unmarshaller.unmarshal(new File(filename));
+                    imported = wrapper.getContacts();
+                }
             }
         }
 
