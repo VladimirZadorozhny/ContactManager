@@ -45,21 +45,49 @@ public class ContactManager {
         return contacts;
     }
 
+    private List<Contact> globalImport(String filename, String extension) throws Exception {
+        List<Contact> imported = new ArrayList<>();
+        switch (extension) {
+            case "json" -> {
+                ObjectMapper mapper = new ObjectMapper();
+                imported.addAll(Arrays.asList(mapper.readValue(new File(filename), Contact[].class)));
+            }
+            case "xml" -> {
+                JAXBContext context = JAXBContext.newInstance(ContactList.class);
+                Unmarshaller unmarshaller = context.createUnmarshaller();
+                SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                Schema schema = factory.newSchema(SCHEMA_PATH.toFile());
+                unmarshaller.setSchema(schema);
+                ContactList wrapper = (ContactList) unmarshaller.unmarshal(new File(filename));
+                imported = wrapper.getContacts();
+            }
+        }
+
+        if (!imported.isEmpty()) {
+            imported.removeAll(contacts);
+        }
+        return imported;
+    }
+
     public void exportToJson(String filename) {
         try {
+            List<Contact> imported = globalImport(filename, "json");
+            if (!imported.isEmpty())
+                contacts.addAll(imported);
+
             ObjectMapper mapper = new ObjectMapper();
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(filename), contacts);
             System.out.println("Export successfully to " + filename);
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Export error: " + e.getMessage());
         }
     }
 
     public void importFromJson(String filename) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            List<Contact> imported = Arrays.asList(mapper.readValue(new File(filename), Contact[].class));
-            contacts.addAll(imported);
+            List<Contact> imported = globalImport(filename, "json");
+            if (!imported.isEmpty())
+              contacts.addAll(imported);
             System.out.println(imported.size() + " contacts imported from file " + filename);
         } catch (Exception e) {
             System.out.println("JSON import error: " + e.getMessage());
@@ -83,6 +111,10 @@ public class ContactManager {
             Validator validator = schema.newValidator();
             validator.validate(new StreamSource(new StringReader(writer.toString())));
 
+            List<Contact> imported = globalImport(filename, "xml");
+            if (!imported.isEmpty())
+                wrapper.getContacts().addAll(imported);
+
             marshaller.marshal(wrapper, new File(filename));
             System.out.println("Export successfully to " + filename);
         } catch (Exception e) {
@@ -92,14 +124,11 @@ public class ContactManager {
 
     public void importFromXml(String filename) {
         try {
-            JAXBContext context = JAXBContext.newInstance(ContactList.class);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = factory.newSchema(SCHEMA_PATH.toFile());
-            unmarshaller.setSchema(schema);
-            ContactList wrapper = (ContactList) unmarshaller.unmarshal(new File(filename));
-            contacts.addAll(wrapper.getContacts());
-            System.out.println(wrapper.getContacts().size() + " contacts imported from file " + filename);
+            List<Contact> imported = globalImport(filename, "xml");
+
+            if (!imported.isEmpty())
+              contacts.addAll(imported);
+            System.out.println(imported.size() + " contacts imported from file " + filename);
         } catch (Exception e) {
             System.out.println("XML import error: " + e.getMessage());
         }

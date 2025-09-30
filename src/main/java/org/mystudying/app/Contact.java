@@ -5,6 +5,8 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
+import java.util.Objects;
+
 @XmlRootElement(name = "contact")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Contact {
@@ -40,5 +42,15 @@ public class Contact {
         return name + " | " + phone + " | " + email +  " | ";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return Objects.equals(name, contact.name) && Objects.equals(phone, contact.phone) && Objects.equals(email, contact.email);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, phone, email);
+    }
 }
